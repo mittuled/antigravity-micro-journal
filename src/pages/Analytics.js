@@ -10,6 +10,10 @@ import { getMonthName } from '../utils/date.js';
  * Create the Analytics page
  * @returns {HTMLElement} Analytics page element
  */
+/**
+ * Create the Analytics page
+ * @returns {HTMLElement} Analytics page element
+ */
 export async function createAnalyticsPage() {
   const page = document.createElement('div');
   page.className = 'analytics-page';
@@ -22,40 +26,67 @@ export async function createAnalyticsPage() {
     <div class="analytics-page__content stagger-children">
       <section class="activity-section glass-card">
         <h3 class="section-title">Activity</h3>
-        <div class="activity-graph" id="activity-graph"></div>
+        <div class="activity-graph" id="activity-graph">
+            <div class="loading-spinner">Loading activity...</div>
+        </div>
         <div class="activity-stats" id="activity-stats"></div>
       </section>
       
-      <section class="stats-grid" id="stats-grid"></section>
+      <section class="stats-grid" id="stats-grid">
+          <div class="loading-spinner">Loading stats...</div>
+      </section>
       
       <section class="breakdown-section glass-card">
         <h3 class="section-title">Entry Breakdown</h3>
-        <div class="breakdown-list" id="breakdown-list"></div>
+        <div class="breakdown-list" id="breakdown-list">
+            <div class="loading-spinner">Loading breakdown...</div>
+        </div>
+      </section>
+      
+      <section class="debug-section" style="margin-top: 2rem; padding: 1rem; border: 1px dashed red; color: red; display: none;">
+        <h3>Debug Log</h3>
+        <pre id="debug-log" style="white-space: pre-wrap; font-size: 10px;"></pre>
       </section>
     </div>
   `;
 
-  // Load activity graph
-  try {
-    await renderActivityGraph(page.querySelector('#activity-graph'), page.querySelector('#activity-stats'));
-  } catch (err) {
-    console.error('Failed to render activity graph:', err);
-    page.querySelector('#activity-graph').innerHTML = `<p class="error-text">Failed to load graph: ${err.message}</p>`;
-  }
+  // Helper to log to screen
+  const logError = (msg, err) => {
+    const debugSection = page.querySelector('.debug-section');
+    const debugLog = page.querySelector('#debug-log');
+    debugSection.style.display = 'block';
+    debugLog.textContent += `${msg}: ${err.message}\n${err.stack}\n\n`;
+    console.error(msg, err);
+  };
 
-  // Load stats
-  try {
-    await renderStats(page.querySelector('#stats-grid'));
-  } catch (err) {
-    console.error('Failed to render stats:', err);
-  }
+  // Render asynchronously without awaiting here (to return page immediately)
+  // But wait, router awaits this function. validation: router calls `await handler()`.
+  // If we want router to show the page, we return a resolved promise. 
+  // We can just trigger the async work without awaiting it.
 
-  // Load breakdown
-  try {
-    await renderBreakdown(page.querySelector('#breakdown-list'));
-  } catch (err) {
-    console.error('Failed to render breakdown:', err);
-  }
+  setTimeout(async () => {
+    // Load activity graph
+    try {
+      await renderActivityGraph(page.querySelector('#activity-graph'), page.querySelector('#activity-stats'));
+    } catch (err) {
+      logError('Failed to render activity graph', err);
+      page.querySelector('#activity-graph').innerHTML = `<p class="error-text">Failed to load graph.</p>`;
+    }
+
+    // Load stats
+    try {
+      await renderStats(page.querySelector('#stats-grid'));
+    } catch (err) {
+      logError('Failed to render stats', err);
+    }
+
+    // Load breakdown
+    try {
+      await renderBreakdown(page.querySelector('#breakdown-list'));
+    } catch (err) {
+      logError('Failed to render breakdown', err);
+    }
+  }, 0);
 
   return page;
 }
