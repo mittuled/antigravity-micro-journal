@@ -17,6 +17,8 @@ import { createSettingsPage, applyTheme } from './pages/Settings.js';
 import { createProfilePage } from './pages/Profile.js';
 import { getSettings } from './data/store.js';
 
+
+
 /**
  * Initialize the application
  */
@@ -63,6 +65,8 @@ async function init() {
             });
         });
     }
+
+
 }
 
 // Start the app

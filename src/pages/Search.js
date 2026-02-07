@@ -313,7 +313,7 @@ const styles = `
   position: relative;
   text-align: center;
   margin-bottom: var(--space-4);
-  padding-top: var(--space-8);
+  padding-top: 0;
 }
 
 .search-page__header h1 {

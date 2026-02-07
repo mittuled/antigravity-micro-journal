@@ -96,7 +96,7 @@ const styles = `
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.2) 100%);
+  background: linear-gradient(135deg, var(--accent-primary-alpha-30) 0%, rgba(139, 92, 246, 0.2) 100%);
   border: 2px solid var(--type-color, var(--accent-primary));
   box-shadow: 
     0 0 20px color-mix(in srgb, var(--type-color, var(--accent-primary)) 40%, transparent),
@@ -119,7 +119,7 @@ const styles = `
   width: 3px;
   flex: 1;
   min-height: var(--space-4);
-  background: linear-gradient(to bottom, var(--type-color, var(--accent-primary)) 0%, rgba(99, 102, 241, 0.15) 100%);
+  background: linear-gradient(to bottom, var(--type-color, var(--accent-primary)) 0%, var(--accent-primary-alpha-15) 100%);
   border-radius: 3px;
   margin-top: var(--space-2);
 }
@@ -160,10 +160,10 @@ const styles = `
 }
 
 .timeline-entry__content .badge {
-  display: inline;
-  padding: var(--space-1) var(--space-2);
+  padding: 2px var(--space-2);
   font-size: var(--font-size-xs);
-  vertical-align: baseline;
+  vertical-align: middle;
+  margin: 1px 0;
 }
 
 .timeline-entry__actions {

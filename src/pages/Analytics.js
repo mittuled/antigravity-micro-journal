@@ -36,13 +36,26 @@ export async function createAnalyticsPage() {
   `;
 
   // Load activity graph
-  await renderActivityGraph(page.querySelector('#activity-graph'), page.querySelector('#activity-stats'));
+  try {
+    await renderActivityGraph(page.querySelector('#activity-graph'), page.querySelector('#activity-stats'));
+  } catch (err) {
+    console.error('Failed to render activity graph:', err);
+    page.querySelector('#activity-graph').innerHTML = `<p class="error-text">Failed to load graph: ${err.message}</p>`;
+  }
 
   // Load stats
-  await renderStats(page.querySelector('#stats-grid'));
+  try {
+    await renderStats(page.querySelector('#stats-grid'));
+  } catch (err) {
+    console.error('Failed to render stats:', err);
+  }
 
   // Load breakdown
-  await renderBreakdown(page.querySelector('#breakdown-list'));
+  try {
+    await renderBreakdown(page.querySelector('#breakdown-list'));
+  } catch (err) {
+    console.error('Failed to render breakdown:', err);
+  }
 
   return page;
 }
@@ -271,7 +284,7 @@ const styles = `
   border: 1px solid var(--glass-border);
 }
 
-.activity-graph__cell[data-level="1"] { background: rgba(99, 102, 241, 0.3); border-color: rgba(99, 102, 241, 0.4); }
+.activity-graph__cell[data-level="1"] { background: var(--accent-primary-alpha-30); border-color: rgba(99, 102, 241, 0.4); }
 .activity-graph__cell[data-level="2"] { background: rgba(99, 102, 241, 0.5); border-color: rgba(99, 102, 241, 0.6); }
 .activity-graph__cell[data-level="3"] { background: rgba(99, 102, 241, 0.7); border-color: rgba(99, 102, 241, 0.8); }
 .activity-graph__cell[data-level="4"] { background: rgba(99, 102, 241, 0.9); border-color: var(--accent-primary); }

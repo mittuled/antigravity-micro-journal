@@ -235,7 +235,10 @@ export async function getActivityData(weeks = 17) {
     const dateCounts = {};
 
     entries.forEach(entry => {
+        if (!entry.createdAt) return;
         const date = new Date(entry.createdAt);
+        if (isNaN(date.getTime())) return;
+
         const dateKey = date.toISOString().split('T')[0];
         dateCounts[dateKey] = (dateCounts[dateKey] || 0) + 1;
     });

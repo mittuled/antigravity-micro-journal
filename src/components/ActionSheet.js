@@ -9,14 +9,14 @@
  * @returns {Promise<string|null>} Selected option value or null
  */
 export function showActionSheet({ title, options, selectedValue }) {
-    return new Promise((resolve) => {
-        const overlay = document.createElement('div');
-        overlay.className = 'action-sheet-overlay';
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'action-sheet-overlay';
 
-        const sheet = document.createElement('div');
-        sheet.className = 'action-sheet animate-slide-in-bottom';
+    const sheet = document.createElement('div');
+    sheet.className = 'action-sheet animate-slide-in-bottom';
 
-        const optionsHtml = options.map(opt => `
+    const optionsHtml = options.map(opt => `
       <button class="action-sheet__option ${opt.value === selectedValue ? 'action-sheet__option--selected' : ''}" 
               data-value="${opt.value}">
         ${opt.icon ? `<span class="action-sheet__icon">${opt.icon}</span>` : ''}
@@ -29,7 +29,7 @@ export function showActionSheet({ title, options, selectedValue }) {
       </button>
     `).join('');
 
-        sheet.innerHTML = `
+    sheet.innerHTML = `
       <div class="action-sheet__header">
         <span class="action-sheet__title">${title}</span>
       </div>
@@ -39,40 +39,40 @@ export function showActionSheet({ title, options, selectedValue }) {
       <button class="action-sheet__cancel">Cancel</button>
     `;
 
-        overlay.appendChild(sheet);
-        document.body.appendChild(overlay);
-        document.body.style.overflow = 'hidden';
+    overlay.appendChild(sheet);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
 
-        const close = (result) => {
-            sheet.classList.remove('animate-slide-in-bottom');
-            sheet.classList.add('animate-slide-out-bottom');
-            overlay.style.opacity = '0';
+    const close = (result) => {
+      sheet.classList.remove('animate-slide-in-bottom');
+      sheet.classList.add('animate-slide-out-bottom');
+      overlay.style.opacity = '0';
 
-            setTimeout(() => {
-                overlay.remove();
-                document.body.style.overflow = '';
-                resolve(result);
-            }, 250);
+      setTimeout(() => {
+        overlay.remove();
+        document.body.style.overflow = '';
+        resolve(result);
+      }, 250);
 
-            // Haptic feedback
-            if (navigator.vibrate && result) {
-                navigator.vibrate(10);
-            }
-        };
+      // Haptic feedback
+      if (navigator.vibrate && result) {
+        navigator.vibrate(10);
+      }
+    };
 
-        // Option click handlers
-        sheet.querySelectorAll('.action-sheet__option').forEach(btn => {
-            btn.addEventListener('click', () => {
-                close(btn.dataset.value);
-            });
-        });
-
-        // Cancel
-        sheet.querySelector('.action-sheet__cancel').addEventListener('click', () => close(null));
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) close(null);
-        });
+    // Option click handlers
+    sheet.querySelectorAll('.action-sheet__option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        close(btn.dataset.value);
+      });
     });
+
+    // Cancel
+    sheet.querySelector('.action-sheet__cancel').addEventListener('click', () => close(null));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close(null);
+    });
+  });
 }
 
 // CSS for Action Sheet (injected)
@@ -80,7 +80,7 @@ const styles = `
 .action-sheet-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-bg);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: var(--z-overlay);
@@ -206,8 +206,8 @@ const styles = `
 
 // Inject styles
 if (!document.getElementById('action-sheet-styles')) {
-    const styleSheet = document.createElement('style');
-    styleSheet.id = 'action-sheet-styles';
-    styleSheet.textContent = styles;
-    document.head.appendChild(styleSheet);
+  const styleSheet = document.createElement('style');
+  styleSheet.id = 'action-sheet-styles';
+  styleSheet.textContent = styles;
+  document.head.appendChild(styleSheet);
 }

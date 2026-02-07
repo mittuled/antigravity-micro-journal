@@ -145,7 +145,7 @@ const styles = `
 
 .write-page__header {
   text-align: center;
-  padding: var(--space-8) 0;
+  padding: 0 0 var(--space-8) 0;
 }
 
 .write-page__header h1 {

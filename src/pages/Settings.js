@@ -277,7 +277,7 @@ function createTypeForm() {
 const styles = `
 .settings-page {
   padding: var(--space-4);
-  padding-top: var(--space-8);
+
 }
 
 .settings-page__header {

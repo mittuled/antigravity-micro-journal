@@ -142,7 +142,7 @@ const styles = `
   left: 0;
   min-width: 160px;
   padding: var(--space-2);
-  background: rgba(20, 20, 40, 0.95);
+  background: var(--bg-dropdown);
   backdrop-filter: blur(var(--glass-blur-strong));
   -webkit-backdrop-filter: blur(var(--glass-blur-strong));
   border: 1px solid var(--glass-border);

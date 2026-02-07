@@ -11,18 +11,18 @@ let activeModal = null;
  * @returns {Promise<any>} Result from modal
  */
 export function showModal({ title, content, onClose }) {
-    return new Promise((resolve) => {
-        // Close any existing modal
-        if (activeModal) {
-            closeModal();
-        }
+  return new Promise((resolve) => {
+    // Close any existing modal
+    if (activeModal) {
+      closeModal();
+    }
 
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
 
-        const modal = document.createElement('div');
-        modal.className = 'modal animate-slide-in-bottom';
-        modal.innerHTML = `
+    const modal = document.createElement('div');
+    modal.className = 'modal animate-slide-in-bottom';
+    modal.innerHTML = `
       <div class="modal__header">
         <h2 class="modal__title">${title}</h2>
         <button class="modal__close" aria-label="Close">
@@ -34,56 +34,56 @@ export function showModal({ title, content, onClose }) {
       <div class="modal__content"></div>
     `;
 
-        // Add content
-        const contentContainer = modal.querySelector('.modal__content');
-        if (typeof content === 'string') {
-            contentContainer.innerHTML = content;
-        } else if (content instanceof HTMLElement) {
-            contentContainer.appendChild(content);
-        }
+    // Add content
+    const contentContainer = modal.querySelector('.modal__content');
+    if (typeof content === 'string') {
+      contentContainer.innerHTML = content;
+    } else if (content instanceof HTMLElement) {
+      contentContainer.appendChild(content);
+    }
 
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
-        activeModal = overlay;
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    activeModal = overlay;
 
-        // Prevent body scroll
-        document.body.style.overflow = 'hidden';
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
 
-        // Focus trap
-        modal.querySelector('.modal__close').focus();
+    // Focus trap
+    modal.querySelector('.modal__close').focus();
 
-        const close = (result) => {
-            modal.classList.remove('animate-slide-in-bottom');
-            modal.classList.add('animate-slide-out-bottom');
-            overlay.style.opacity = '0';
+    const close = (result) => {
+      modal.classList.remove('animate-slide-in-bottom');
+      modal.classList.add('animate-slide-out-bottom');
+      overlay.style.opacity = '0';
 
-            setTimeout(() => {
-                overlay.remove();
-                document.body.style.overflow = '';
-                activeModal = null;
-                if (onClose) onClose(result);
-                resolve(result);
-            }, 250);
-        };
+      setTimeout(() => {
+        overlay.remove();
+        document.body.style.overflow = '';
+        activeModal = null;
+        if (onClose) onClose(result);
+        resolve(result);
+      }, 250);
+    };
 
-        // Close handlers
-        modal.querySelector('.modal__close').addEventListener('click', () => close(null));
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) close(null);
-        });
-
-        // Escape key
-        const handleEscape = (e) => {
-            if (e.key === 'Escape') {
-                document.removeEventListener('keydown', handleEscape);
-                close(null);
-            }
-        };
-        document.addEventListener('keydown', handleEscape);
-
-        // Expose close function
-        modal.close = close;
+    // Close handlers
+    modal.querySelector('.modal__close').addEventListener('click', () => close(null));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close(null);
     });
+
+    // Escape key
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        document.removeEventListener('keydown', handleEscape);
+        close(null);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+
+    // Expose close function
+    modal.close = close;
+  });
 }
 
 /**
@@ -92,13 +92,13 @@ export function showModal({ title, content, onClose }) {
  * @returns {Promise<boolean>} User confirmation
  */
 export function showConfirm({ title, message, confirmText = 'Delete', cancelText = 'Cancel', isDanger = true }) {
-    return new Promise((resolve) => {
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay modal-overlay--centered';
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay modal-overlay--centered';
 
-        const dialog = document.createElement('div');
-        dialog.className = 'confirm-dialog animate-scale-in';
-        dialog.innerHTML = `
+    const dialog = document.createElement('div');
+    dialog.className = 'confirm-dialog animate-scale-in';
+    dialog.innerHTML = `
       <h3 class="confirm-dialog__title">${title}</h3>
       <p class="confirm-dialog__message">${message}</p>
       <div class="confirm-dialog__actions">
@@ -107,39 +107,39 @@ export function showConfirm({ title, message, confirmText = 'Delete', cancelText
       </div>
     `;
 
-        overlay.appendChild(dialog);
-        document.body.appendChild(overlay);
-        document.body.style.overflow = 'hidden';
+    overlay.appendChild(dialog);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
 
-        const close = (result) => {
-            dialog.style.transform = 'scale(0.9)';
-            dialog.style.opacity = '0';
-            overlay.style.opacity = '0';
+    const close = (result) => {
+      dialog.style.transform = 'scale(0.9)';
+      dialog.style.opacity = '0';
+      overlay.style.opacity = '0';
 
-            setTimeout(() => {
-                overlay.remove();
-                document.body.style.overflow = '';
-                resolve(result);
-            }, 200);
-        };
+      setTimeout(() => {
+        overlay.remove();
+        document.body.style.overflow = '';
+        resolve(result);
+      }, 200);
+    };
 
-        dialog.querySelector('.confirm-dialog__cancel').addEventListener('click', () => close(false));
-        dialog.querySelector('.confirm-dialog__confirm').addEventListener('click', () => close(true));
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) close(false);
-        });
+    dialog.querySelector('.confirm-dialog__cancel').addEventListener('click', () => close(false));
+    dialog.querySelector('.confirm-dialog__confirm').addEventListener('click', () => close(true));
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close(false);
     });
+  });
 }
 
 /**
  * Close the active modal
  */
 export function closeModal() {
-    if (activeModal) {
-        activeModal.remove();
-        document.body.style.overflow = '';
-        activeModal = null;
-    }
+  if (activeModal) {
+    activeModal.remove();
+    document.body.style.overflow = '';
+    activeModal = null;
+  }
 }
 
 // CSS for Modal (injected)
@@ -147,7 +147,7 @@ const styles = `
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-bg);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: var(--z-overlay);
@@ -264,8 +264,8 @@ const styles = `
 
 // Inject styles
 if (!document.getElementById('modal-styles')) {
-    const styleSheet = document.createElement('style');
-    styleSheet.id = 'modal-styles';
-    styleSheet.textContent = styles;
-    document.head.appendChild(styleSheet);
+  const styleSheet = document.createElement('style');
+  styleSheet.id = 'modal-styles';
+  styleSheet.textContent = styles;
+  document.head.appendChild(styleSheet);
 }

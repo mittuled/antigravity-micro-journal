@@ -74,9 +74,18 @@ export const router = {
         }
 
         // Get new page content
-        const page = await handler();
-        page.classList.add('page', 'page-enter');
-        pageContainer.appendChild(page);
+        try {
+            const page = await handler();
+            page.classList.add('page', 'page-enter');
+            pageContainer.appendChild(page);
+        } catch (error) {
+            console.error('Route handler failed:', error);
+            pageContainer.innerHTML = `<div class="error-page">
+                <h3>Something went wrong</h3>
+                <p>${error.message}</p>
+                <button onclick="window.location.hash='journal'">Go Home</button>
+            </div>`;
+        }
 
         currentRoute = hash;
 
