@@ -23,7 +23,7 @@ export async function createAnalyticsPage() {
       <h1 class="heading-2">Analytics</h1>
     </div>
     
-    <div class="analytics-page__content stagger-children">
+    <div class="analytics-page__content">
       <section class="activity-section glass-card">
         <h3 class="section-title">Activity</h3>
         <div class="activity-graph" id="activity-graph">
@@ -42,22 +42,8 @@ export async function createAnalyticsPage() {
             <div class="loading-spinner">Loading breakdown...</div>
         </div>
       </section>
-      
-      <section class="debug-section" style="margin-top: 2rem; padding: 1rem; border: 1px dashed red; color: red; display: none;">
-        <h3>Debug Log</h3>
-        <pre id="debug-log" style="white-space: pre-wrap; font-size: 10px;"></pre>
-      </section>
     </div>
   `;
-
-  // Helper to log to screen
-  const logError = (msg, err) => {
-    const debugSection = page.querySelector('.debug-section');
-    const debugLog = page.querySelector('#debug-log');
-    debugSection.style.display = 'block';
-    debugLog.textContent += `${msg}: ${err.message}\n${err.stack}\n\n`;
-    console.error(msg, err);
-  };
 
   // Render asynchronously without awaiting here (to return page immediately)
   // But wait, router awaits this function. validation: router calls `await handler()`.
@@ -69,7 +55,7 @@ export async function createAnalyticsPage() {
     try {
       await renderActivityGraph(page.querySelector('#activity-graph'), page.querySelector('#activity-stats'));
     } catch (err) {
-      logError('Failed to render activity graph', err);
+      console.error('Failed to render activity graph', err);
       page.querySelector('#activity-graph').innerHTML = `<p class="error-text">Failed to load graph.</p>`;
     }
 
@@ -77,14 +63,14 @@ export async function createAnalyticsPage() {
     try {
       await renderStats(page.querySelector('#stats-grid'));
     } catch (err) {
-      logError('Failed to render stats', err);
+      console.error('Failed to render stats', err);
     }
 
     // Load breakdown
     try {
       await renderBreakdown(page.querySelector('#breakdown-list'));
     } catch (err) {
-      logError('Failed to render breakdown', err);
+      console.error('Failed to render breakdown', err);
     }
   }, 0);
 
@@ -431,6 +417,14 @@ const styles = `
   font-size: var(--font-size-xs);
   color: var(--text-muted);
   align-self: flex-end;
+}
+
+.loading-spinner {
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: var(--font-size-sm);
 }
 `;
 
