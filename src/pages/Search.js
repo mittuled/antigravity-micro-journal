@@ -17,6 +17,7 @@ export async function createSearchPage() {
 
   page.innerHTML = `
     <div class="search-page__header">
+      <h1 class="heading-2">Search</h1>
       <div class="search-bar glass-card">
         <svg class="search-bar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/>
@@ -36,7 +37,7 @@ export async function createSearchPage() {
     </div>
     
     <div class="search-page__filters" id="filter-chips"></div>
-    
+
     <div class="search-page__results" id="search-results">
       <div class="search-page__empty" id="empty-state">
         <span class="search-page__empty-icon">🔍</span>
@@ -311,6 +312,11 @@ const styles = `
 .search-page__header {
   position: relative;
   text-align: center;
+  margin-bottom: var(--space-4);
+  padding-top: var(--space-8);
+}
+
+.search-page__header h1 {
   margin-bottom: var(--space-4);
 }
 

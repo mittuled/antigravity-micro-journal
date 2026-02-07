@@ -29,14 +29,6 @@ export async function createWritePage() {
     <div class="write-page__spacer"></div>
     
     <div class="write-page__editor">
-      <button class="write-page__type-picker glass-card" id="type-picker">
-        <span class="write-page__type-icon">${currentType.icon}</span>
-        <span class="write-page__type-label">${currentType.label}</span>
-        <svg class="write-page__type-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      </button>
-      
       <textarea 
         class="write-page__input glass-input" 
         id="entry-content"
@@ -44,13 +36,23 @@ export async function createWritePage() {
         rows="4"
       ></textarea>
       
-      <button class="write-page__submit glass-button glass-button--primary" id="submit-entry">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 2L11 13"/>
-          <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
-        </svg>
-        Save Entry
-      </button>
+      <div class="write-page__actions">
+        <button class="write-page__type-picker glass-card" id="type-picker">
+          <span class="write-page__type-icon">${currentType.icon}</span>
+          <span class="write-page__type-label">${currentType.label}</span>
+          <svg class="write-page__type-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+        <button class="write-page__submit glass-button glass-button--primary" id="submit-entry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13"/>
+            <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+          Save Entry
+        </button>
+      </div>
     </div>
   `;
 
@@ -162,16 +164,24 @@ const styles = `
   padding-bottom: var(--space-4);
 }
 
+.write-page__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
 .write-page__type-picker {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
   cursor: pointer;
-  width: fit-content;
   border: none;
   background: var(--glass-bg);
   color: var(--text-primary);
+  /* Ensure it doesn't shrink too small */
+  flex-shrink: 0;
 }
 
 .write-page__type-icon {
@@ -195,7 +205,7 @@ const styles = `
 }
 
 .write-page__submit {
-  align-self: flex-end;
+  align-self: unset;
 }
 
 .write-page__submit svg {

@@ -152,6 +152,7 @@ const styles = `
   visibility: hidden;
   transform: translateY(-8px) scale(0.95);
   transition: all var(--transition-base);
+  pointer-events: auto;
 }
 
 .menu-bar__dropdown--open {
